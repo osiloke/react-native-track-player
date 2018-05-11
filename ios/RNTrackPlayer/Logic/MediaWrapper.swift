@@ -139,14 +139,14 @@ class MediaWrapper: AudioPlayerDelegate {
         if let trackIndex = queue.index(where: { $0.id == id }) {
             currentTrack?.skipped = true
             currentIndex = trackIndex
-            play()
+            playAfterSkip()
         }
     }
     
     func playNext() -> Bool {
         if queue.indices.contains(currentIndex + 1) {
             currentIndex = currentIndex + 1
-            play()
+            playAfterSkip()
             return true
         }
         
@@ -157,14 +157,34 @@ class MediaWrapper: AudioPlayerDelegate {
     func playPrevious() -> Bool {
         if queue.indices.contains(currentIndex - 1) {
             currentIndex = currentIndex - 1
-            play()
+            playAfterSkip()
             return true
         }
         
         stop()
         return false
     }
-    
+    func playAfterSkip() {
+        guard queue.count > 0 else { return }
+        if (currentIndex == -1) { currentIndex = 0 }
+        
+        let track = queue[currentIndex]
+        player.play(track: track)
+        
+        setPitchAlgorithm(for: track)
+        
+        // fetch artwork and cancel any previous requests
+        trackImageTask?.cancel()
+        if let artworkURL = track.artworkURL?.value {
+            trackImageTask = URLSession.shared.dataTask(with: artworkURL, completionHandler: { (data, _, error) in
+                if let data = data, let artwork = UIImage(data: data), error == nil {
+                    track.artwork = MPMediaItemArtwork(image: artwork)
+                }
+            })
+        }
+        
+        trackImageTask?.resume()
+    }
     func play() {
         guard queue.count > 0 else { return }
         if (currentIndex == -1) { currentIndex = 0 }
