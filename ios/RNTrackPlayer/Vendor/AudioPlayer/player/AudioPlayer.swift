@@ -115,6 +115,9 @@ public class AudioPlayer: NSObject {
                 // Creates new player
                 player = AVPlayer(playerItem: playerItem)
                 
+//                if #available(iOS 10.0, tvOS 10.0, OSX 10.12, *){
+//                    player?.automaticallyWaitsToMinimizeStalling = false
+//                }
                 // Updates information on the lock screen
                 updateNowPlayingInfoCenter()
 
