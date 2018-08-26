@@ -191,6 +191,7 @@ class MediaWrapper: AudioPlayerDelegate {
         
         // resume playback if it was paused and check currentIndex wasn't changed by a skip/previous
         if player.state == .paused && currentTrack?.id == queue[currentIndex].id {
+            print("resuming playback after clicking play")
             player.resume()
             return
         }
