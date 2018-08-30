@@ -24,7 +24,7 @@ struct MediaURL {
             value = URL(string: encodedURI)!
         } else {
             let url = object as! String
-            isLocal = url.lowercased().hasPrefix("file://")
+            isLocal = url.lowercased().contains("127.0.0.1") || url.lowercased().contains("localhost") || url.lowercased().hasPrefix("file://")
             value = URL(string: url)!
         }
     }

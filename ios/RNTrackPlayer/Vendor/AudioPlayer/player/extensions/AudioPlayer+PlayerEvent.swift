@@ -15,6 +15,7 @@ extension AudioPlayer {
     func handlePlayerEvent(from producer: EventProducer, with event: PlayerEventProducer.PlayerEvent) {
         switch event {
         case .endedPlaying(let error):
+            print("ended playing")
             if currentItem?.url.isLocal == false, isInternetConnectionError(error) || (!isOnline && isEndedEarlyError(error)) {
                 // While playing online content we got an internet error or ended playing
                 // the item before it was finished while offline (likely also due to connection loss).

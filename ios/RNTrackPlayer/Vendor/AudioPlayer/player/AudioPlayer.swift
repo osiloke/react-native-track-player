@@ -101,7 +101,7 @@ public class AudioPlayer: NSObject {
                     backgroundHandler.beginBackgroundTask()
                     return
                 }
-                
+            
                 // Reset special state flags
                 pausedForInterruption = false
                 
@@ -380,7 +380,7 @@ public class AudioPlayer: NSObject {
     /// Boolean value indicating whether the player should resume playing (after buffering)
     var shouldResumePlaying: Bool {
         return !state.isPaused &&
-            (stateWhenConnectionLost.map { !$0.isPaused } ?? true) &&
+//            (stateWhenConnectionLost.map { !$0.isPaused } ?? true) &&
             (stateBeforeBuffering.map { !$0.isPaused } ?? true)
     }
 
