@@ -125,8 +125,8 @@ class MediaWrapper: AudioPlayerDelegate {
         }
         
         switch actionAfterRemovals {
-            case "play": play()
-            case "stop": stop()
+            // case "play": play()
+            // case "stop": stop()
             default: break;
         }
     }
