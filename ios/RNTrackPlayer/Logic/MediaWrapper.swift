@@ -14,10 +14,12 @@ protocol MediaWrapperDelegate: class {
     func playerSwitchedTracks(trackId: String?, time: TimeInterval?, nextTrackId: String?)
     func playerExhaustedQueue(trackId: String?, time: TimeInterval?)
     func playbackFailed(error: Error)
+    func playerItemEnd(trackId: String?, time: TimeInterval?)
 }
 
 class MediaWrapper: AudioPlayerDelegate {
     private(set) var queue: [Track]
+    private var repeatOnce: Bool
     private var currentIndex: Int
     private let player: AudioPlayer
     private var trackImageTask: URLSessionDataTask?
@@ -84,6 +86,7 @@ class MediaWrapper: AudioPlayerDelegate {
         self.currentIndex = -1
         self.player = AudioPlayer()
         
+        self.repeatOnce = false
         self.player.delegate = self
         self.player.bufferingStrategy = .playWhenBufferNotEmpty
         
@@ -131,6 +134,10 @@ class MediaWrapper: AudioPlayerDelegate {
         }
     }
     
+    func setRepeat(isRepeat: Bool) {
+        repeatOnce = isRepeat;
+    }
+
     func removeUpcomingTracks() {
         queue = queue.filter { $0.0 <= currentIndex }
     }
@@ -257,6 +264,14 @@ class MediaWrapper: AudioPlayerDelegate {
     
     func audioPlayer(_ audioPlayer: AudioPlayer, didFinishPlaying item: Track, at position: TimeInterval?) {
         if item.skipped { return }
+
+         
+        delegate?.playerItemEnd(trackId: item.id, time: position)
+         if (repeatOnce) {
+            seek(to: 0)
+            return;
+        }
+
         if (!playNext()) {
             delegate?.playerExhaustedQueue(trackId: item.id, time: position)
         }
