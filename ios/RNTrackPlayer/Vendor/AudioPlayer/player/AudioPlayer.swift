@@ -192,7 +192,7 @@ public class AudioPlayer: NSObject {
     var resumeAfterInterruption = true
 
     /// Defines whether the player should resume after a connection loss or not. Default value is `true`.
-    var resumeAfterConnectionLoss = false
+    var resumeAfterConnectionLoss = true
 
     /// Defines the volume of the player. `1.0` means 100% and `0.0` is 0%.
     var volume = Float(1) {
